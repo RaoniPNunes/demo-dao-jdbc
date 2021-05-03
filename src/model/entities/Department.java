@@ -16,6 +16,10 @@ public class Department implements Serializable {
         this.Name = Name;
     }
 
+    public Department() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
     public Integer getId() {
         return Id;
     }
