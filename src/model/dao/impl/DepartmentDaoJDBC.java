@@ -3,6 +3,7 @@ package model.dao.impl;
 
 import db.DbException;
 import java.sql.*;
+import java.util.ArrayList;
 import java.util.List;
 import model.dao.DepartmentDao;
 import model.entities.Department;
@@ -72,12 +73,51 @@ public class DepartmentDaoJDBC implements DepartmentDao{
 
     @Override
     public Department findById(Integer id) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+        
+        try{
+            ps = con.prepareStatement("SELECT * FROM department WHERE Id = ?");
+            
+            ps.setInt(1, id);
+            rs = ps.executeQuery();
+            
+            if(rs.next()){
+               Department dep = new Department();
+               dep.setId(rs.getInt("Id"));
+               dep.setName(rs.getString("Name"));
+               
+               return dep;
+            }
+            return null;
+        }
+        catch(SQLException e){
+            throw new DbException(e.getMessage());
+        }
     }
 
     @Override
     public List<Department> findAll() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+        
+        try{
+            ps = con.prepareStatement("select * from department");
+            rs = ps.executeQuery();
+            
+            List<Department> list = new ArrayList<>();
+            
+            while(rs.next()){
+                Department dep = new Department();
+                dep.setId(rs.getInt("Id"));
+                dep.setName(rs.getString("Name"));
+                list.add(dep);
+            }
+            return list;
+        }
+        catch(SQLException e){
+            throw new DbException(e.getMessage());
+        }
     }
     
 }
